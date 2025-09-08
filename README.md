@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { BadgeCheck, XCircle, Share2, Printer, Copy, Search } from "lucide-react";
+import { BadgeCheck, XCircle, Search } from "lucide-react";
 import QRCode from "qrcode.react";
+import "./App.css";
 
 const MOCK_DB: Record<string, any> = {
   "60B4FAC2F4A1449480023D81C23A600B2C216B05CC": {
@@ -21,7 +22,7 @@ async function mockLookup(id: string) {
   return payload ? { valid: true, payload } : { valid: false };
 }
 
-export default function VerificationPage() {
+function VerificationPage() {
   const [id, setId] = useState("");
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,11 +46,11 @@ export default function VerificationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 p-6">
+    <div className="min-h-screen bg-gray-50 text-gray-800 p-6 flex flex-col items-center">
       <h1 className="text-xl font-bold mb-4">Certificate Verification</h1>
 
       {/* Input */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-6 w-full max-w-md">
         <input
           type="text"
           placeholder="Enter Verification ID"
@@ -57,13 +58,13 @@ export default function VerificationPage() {
           onChange={(e) => setInput(e.target.value)}
           className="flex-1 p-2 border rounded"
         />
-        <button onClick={submitId} className="px-4 py-2 bg-blue-600 text-white rounded">
+        <button onClick={submitId} className="px-4 py-2 bg-blue-600 text-white rounded flex items-center">
           <Search className="w-4 h-4 inline-block mr-1" /> Verify
         </button>
       </div>
 
       {/* Result */}
-      <div className="p-4 border rounded bg-white shadow">
+      <div className="p-4 border rounded bg-white shadow w-full max-w-md">
         {loading && <p className="text-gray-500">Checking...</p>}
         {!loading && result && result.valid && (
           <div>
@@ -81,7 +82,7 @@ export default function VerificationPage() {
               <li><strong>Date Issued:</strong> {result.payload.dateIssued}</li>
               <li><strong>Status:</strong> {result.payload.status}</li>
             </ul>
-            <div className="mt-4">
+            <div className="mt-4 flex justify-center">
               <QRCode value={shareUrl} size={128} />
             </div>
           </div>
@@ -95,4 +96,8 @@ export default function VerificationPage() {
       </div>
     </div>
   );
+}
+
+export default function App() {
+  return <VerificationPage />;
 }
